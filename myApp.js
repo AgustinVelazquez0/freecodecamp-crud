@@ -125,21 +125,14 @@ const removeManyPeople = (done) => {
 const queryChain = (done) => {
   const foodToSearch = "burrito";
 
-  // Define la consulta base
-  const query = Person.find({ favoriteFoods: foodToSearch });
-
-  // Encadena los métodos en el orden específico mencionado en las instrucciones
-  query.sort("name");
-  query.limit(2);
-  query.select("-age");
-
-  // Ejecuta la consulta
-  query.exec(function (err, data) {
-    if (err) {
-      return done(err);
-    }
-    done(null, data);
-  });
+  Person.find({ favoriteFoods: foodToSearch })
+    .sort("name")
+    .limit(2)
+    .select("-age")
+    .exec(function (err, data) {
+      if (err) return done(err);
+      return done(null, data);
+    });
 };
 
 /** **Well Done !!**

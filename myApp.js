@@ -66,7 +66,6 @@ const findPeopleByName = (personName, done) => {
 
 const findOneByFood = (food, done) => {
   Person.findOne({ favoriteFoods: food }, (err, data) => {
-    // ✅ campo corregido
     if (err) return done(err); // Usamos done en lugar de console.error
     done(null, data);
   });
@@ -126,15 +125,17 @@ const removeManyPeople = (done) => {
 const queryChain = (done) => {
   const foodToSearch = "burrito";
 
-  Person.find({ favoriteFoods: foodToSearch }) // ✅ campo corregido
-    .sort({ name: 1 })
-    .limit(5)
-    .select("-age")
-    .exec((err, data) => {
-      if (err) return done(err); // Usamos done en lugar de console.error
-      done(null, data);
+  // Aseguramos que todos los métodos estén encadenados correctamente
+  Person.find({ favoriteFoods: foodToSearch })
+    .sort({ name: 1 })   // Ordenar por nombre de forma ascendente
+    .limit(5)            // Limitar los resultados a 5
+    .select("-age")      // Excluir el campo "age"
+    .exec((err, data) => {  // Ejecutar la consulta
+      if (err) return done(err);  // Si hay un error, pasarlo al callback
+      done(null, data);          // Si todo está bien, devolver los datos
     });
 };
+
 
 /** **Well Done !!**
 /* You completed these challenges, let's go celebrate !

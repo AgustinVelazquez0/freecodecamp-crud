@@ -4,17 +4,23 @@ require("dotenv").config();
 // Importar mongoose
 const mongoose = require("mongoose");
 
-// Conexión a la base de datos usando la URL de la variable de entorno
+// Check if MONGO_URI is defined
+if (!process.env.MONGO_URI) {
+  console.error('Please set MONGO_URI environment variable');
+  process.exit(1);
+}
+
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true, // Para usar el nuevo analizador de URL
-    useUnifiedTopology: true, // Para usar el nuevo motor de descubrimiento y monitoreo
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Conexión exitosa a la base de datos de MongoDB Atlas.");
+    console.log("Successfully connected to MongoDB Atlas");
   })
   .catch((err) => {
-    console.error("Error al conectar a MongoDB: ", err);
+    console.error("MongoDB connection error:", err);
   });
 
 // Definir un esquema para los "Person"

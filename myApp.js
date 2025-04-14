@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 // Check if MONGO_URI is defined
 if (!process.env.MONGO_URI) {
-  console.error('Please set MONGO_URI environment variable');
+  console.error("Please set MONGO_URI environment variable");
   process.exit(1);
 }
 
@@ -23,11 +23,11 @@ mongoose
     console.error("MongoDB connection error:", err);
   });
 
-// Definir un esquema para los "Person"
+// Definir el esquema para "Person"
 const personSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  age: { type: Number, required: true },
-  favoriteFood: { type: String },
+  age: Number,
+  favoriteFoods: [String], // ✅ campo correcto
 });
 
 // Crear un modelo para "Person"
@@ -41,7 +41,7 @@ const createAndSavePerson = (done) => {
   const person = new Person({
     name: "Juan",
     age: 30,
-    favoriteFood: "Pizza",
+    favoriteFoods: ["Pizza"], // ✅ campo corregido: favoritoFoods es un array
   });
 
   person.save((err, data) => {
@@ -65,7 +65,8 @@ const findPeopleByName = (personName, done) => {
 };
 
 const findOneByFood = (food, done) => {
-  Person.findOne({ favoriteFood: food }, (err, data) => {
+  Person.findOne({ favoriteFoods: food }, (err, data) => {
+    // ✅ campo corregido
     if (err) return done(err); // Usamos done en lugar de console.error
     done(null, data);
   });
@@ -84,7 +85,7 @@ const findEditThenSave = (personId, done) => {
   Person.findById(personId, (err, person) => {
     if (err) return done(err); // Usamos done en lugar de console.error
 
-    person.favoriteFood = foodToAdd;
+    person.favoriteFoods.push(foodToAdd); // ✅ usamos .push() al array
     person.save((err, updatedPerson) => {
       if (err) return done(err); // Usamos done en lugar de console.error
       done(null, updatedPerson);
@@ -102,7 +103,7 @@ const findAndUpdate = (personName, done) => {
     (err, updatedPerson) => {
       if (err) return done(err); // Usamos done en lugar de console.error
       done(null, updatedPerson);
-    }
+    },
   );
 };
 
@@ -125,7 +126,7 @@ const removeManyPeople = (done) => {
 const queryChain = (done) => {
   const foodToSearch = "burrito";
 
-  Person.find({ favoriteFood: foodToSearch })
+  Person.find({ favoriteFoods: foodToSearch }) // ✅ campo corregido
     .sort({ name: 1 })
     .limit(5)
     .select("-age")

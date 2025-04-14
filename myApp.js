@@ -6,7 +6,10 @@ const mongoose = require("mongoose");
 
 // Conexión a la base de datos usando la URL de la variable de entorno
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true, // Para usar el nuevo analizador de URL
+    useUnifiedTopology: true, // Para usar el nuevo motor de descubrimiento y monitoreo
+  })
   .then(() => {
     console.log("Conexión exitosa a la base de datos de MongoDB Atlas.");
   })

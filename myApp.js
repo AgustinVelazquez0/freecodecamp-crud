@@ -126,9 +126,9 @@ const queryChain = (done) => {
   const foodToSearch = "burrito";
 
   Person.find({ favoriteFoods: foodToSearch })
-    .sort({ name: "asc" })
-    .limit(2)
-    .select("-age")
+    .sort("name") // Ordenar por name (sin especificar dirección)
+    .limit(2) // Limitar a 2 resultados
+    .select("-age") // Excluir el campo age
     .exec((err, data) => {
       if (err) return done(err);
       done(null, data);

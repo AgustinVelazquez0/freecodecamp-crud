@@ -125,14 +125,13 @@ const removeManyPeople = (done) => {
 const queryChain = (done) => {
   const foodToSearch = "burrito";
 
-  // Aseguramos que todos los métodos estén encadenados correctamente
   Person.find({ favoriteFoods: foodToSearch })
-    .sort({ name: 1 })   // Ordenar por nombre de forma ascendente
-    .limit(2)            // Limitar los resultados a 2
-    .select("-age")      // Excluir el campo "age"
-    .exec((err, data) => {  // Ejecutar la consulta
-      if (err) return done(err);  // Si hay un error, pasarlo al callback
-      done(null, data);          // Si todo está bien, devolver los datos
+    .sort({ name: 1 })
+    .limit(2)
+    .select({ age: 0 }) 
+    .exec((err, data) => {
+      if (err) return done(err);
+      done(null, data);
     });
 };
 
